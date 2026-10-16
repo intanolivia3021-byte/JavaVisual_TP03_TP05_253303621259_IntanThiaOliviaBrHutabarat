@@ -1,38 +1,19 @@
 package com.unpri.charactermanager.model;
 
+import java.util.Objects;
+
 public class Character {
-
     private String name;
-    private CharacterType type;
     private int level;
-    private int hitPoints;
-    private int attack;
-    private int mana;
+    private CharacterType type;
 
-    // Constructor pertama
-    public Character(String name, CharacterType type) {
+    private static int totalCharacterCreated = 0;
+
+    public Character(String name, int level, CharacterType type) {
         this.name = name;
+        this.level = level;
         this.type = type;
-        this.level = 1;
-        this.hitPoints = 100;
-        this.attack = 10;
-        this.mana = 0;
-    }
-
-    // Constructor kedua
-    public Character(
-            String name,
-            CharacterType type,
-            int level,
-            int hitPoints,
-            int attack) {
-
-        this.name = name;
-        this.type = type;
-        setLevel(level);
-        this.hitPoints = hitPoints;
-        this.attack = attack;
-        this.mana = 0;
+        totalCharacterCreated++;
     }
 
     public String getName() {
@@ -43,6 +24,14 @@ public class Character {
         this.name = name;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public CharacterType getType() {
         return type;
     }
@@ -51,65 +40,36 @@ public class Character {
         this.type = type;
     }
 
-    public int getLevel() {
-        return level;
+    public static int getTotalCharacterCreated() {
+        return totalCharacterCreated;
     }
 
-    public void setLevel(int level) {
-        if (level < 1) {
-            throw new IllegalArgumentException(
-                "Level minimal adalah 1"
-            );
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
 
-        this.level = level;
-        this.hitPoints = 100 + (level - 1) * 20;
-        this.attack = 10 + (level - 1) * 5;
-    }
-
-    public int getHitPoints() {
-        return hitPoints;
-    }
-
-    public void setHitPoints(int hitPoints) {
-        this.hitPoints = hitPoints;
-    }
-
-    public int getAttack() {
-        return attack;
-    }
-
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
-    public int getMana() {
-        return mana;
-    }
-
-    public void setMana(int mana) {
-        if (mana < 0) {
-            throw new IllegalArgumentException(
-                "Mana tidak boleh negatif"
-            );
+        if (!(obj instanceof Character)) {
+            return false;
         }
 
-        this.mana = mana;
+        Character other = (Character) obj;
+
+        return name != null
+                && other.name != null
+                && name.equalsIgnoreCase(other.name);
     }
 
-    public boolean isAlive() {
-        return hitPoints > 0;
+    @Override
+    public int hashCode() {
+        return name == null ? 0 : name.toLowerCase().hashCode();
     }
 
     @Override
     public String toString() {
-        return "Character{" +
-                "name='" + name + '\'' +
-                ", type=" + type +
-                ", level=" + level +
-                ", hitPoints=" + hitPoints +
-                ", attack=" + attack +
-                ", mana=" + mana +
-                '}';
+        return "Character{name='" + name
+                + "', level=" + level
+                + ", type=" + type + "}";
     }
 }
